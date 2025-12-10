@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dataset Preprocessor & Model Comparator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-chart-line"></i> Dataset Preprocessor & Model Comparator</h1>
+            <p class="subtitle">Upload your dataset, preprocess it, and compare model performance</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="card" id="upload-section">
+                <h2><i class="fas fa-upload"></i> Step 1: Upload Dataset</h2>
+                <div class="upload-area" id="upload-area">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p>Drag & drop your dataset file here or click to browse</p>
+                    <p class="file-types">Supported formats: CSV, Excel (.xlsx, .xls)</p>
+                    <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden>
+                    <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+                        <i class="fas fa-folder-open"></i> Browse Files
+                    </button>
+                </div>
+                <div id="upload-status" class="status-message"></div>
+            </section>
+
+            <!-- Dataset Analysis -->
+            <section class="card" id="analysis-section" style="display: none;">
+                <h2><i class="fas fa-chart-bar"></i> Dataset Analysis</h2>
+                <div class="analysis-grid" id="analysis-content">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Preprocessing Controls -->
+            <section class="card" id="preprocess-section" style="display: none;">
+                <h2><i class="fas fa-cogs"></i> Step 2: Preprocessing Options</h2>
+                
+                <div class="preprocessing-options">
+                    <!-- Data Type Conversion -->
+                    <div class="option-group">
+                        <h3><i class="fas fa-exchange-alt"></i> Data Type Conversion</h3>
+                        <div id="type-conversion-container">
+                            <!-- Dynamic columns will be added here -->
+                        </div>
+                    </div>
+
+                    <!-- Missing Values Handling -->
+                    <div class="option-group">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Handle Missing Values</h3>
+                        <p>For columns with less than 50% missing values:</p>
+                        <div id="missing-values-container">
+                            <!-- Dynamic columns will be added here -->
+                        </div>
+                    </div>
+
+                    <!-- Categorical Encoding -->
+                    <div class="option-group">
+                        <h3><i class="fas fa-code"></i> Categorical Encoding</h3>
+                        <div id="encoding-container">
+                            <!-- Dynamic columns will be added here -->
+                        </div>
+                    </div>
+
+                    <!-- Outlier Removal -->
+                    <div class="option-group">
+                        <h3><i class="fas fa-filter"></i> Outlier Removal</h3>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remove-outliers">
+                            <span>Remove outliers using IQR method (for numerical columns)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" id="apply-defaults">
+                        <i class="fas fa-magic"></i> Apply Smart Defaults
+                    </button>
+                    <button class="btn btn-primary" id="apply-preprocessing">
+                        <i class="fas fa-play"></i> Apply Preprocessing
+                    </button>
+                </div>
+            </section>
+
+            <!-- Preprocessing Report -->
+            <section class="card" id="report-section" style="display: none;">
+                <h2><i class="fas fa-clipboard-list"></i> Preprocessing Report</h2>
+                <div class="report-content" id="report-content">
+                    <!-- Steps will be listed here -->
+                </div>
+            </section>
+
+            <!-- Model Training -->
+            <section class="card" id="training-section" style="display: none;">
+                <h2><i class="fas fa-robot"></i> Step 3: Model Training & Comparison</h2>
+                
+                <div class="training-controls">
+                    <div class="form-group">
+                        <label for="target-column"><i class="fas fa-bullseye"></i> Target Column (for supervised learning):</label>
+                        <select id="target-column" class="form-control">
+                            <option value="">Select target column (optional)</option>
+                        </select>
+                        <small>If no target selected, K-Means clustering will be used</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-brain"></i> Select Models to Compare:</label>
+                        <div class="model-checkboxes">
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="model-checkbox" value="Linear Regression" checked>
+                                <span>Linear Regression</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="model-checkbox" value="Logistic Regression" checked>
+                                <span>Logistic Regression</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="model-checkbox" value="Random Forest" checked>
+                                <span>Random Forest</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="model-checkbox" value="Decision Tree" checked>
+                                <span>Decision Tree</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="model-checkbox" value="SVM" checked>
+                                <span>SVM</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="model-checkbox" value="K-Means" checked>
+                                <span>K-Means</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-container" id="progress-container" style="display: none;">
+                    <div class="progress-header">
+                        <h4><i class="fas fa-sync-alt fa-spin"></i> Training Models...</h4>
+                        <span id="progress-percentage">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p id="progress-message">Initializing...</p>
+                </div>
+
+                <button class="btn btn-primary" id="train-models">
+                    <i class="fas fa-play-circle"></i> Start Model Training
+                </button>
+            </section>
+
+            <!-- Results Comparison -->
+            <section class="card" id="results-section" style="display: none;">
+                <h2><i class="fas fa-chart-pie"></i> Results Comparison</h2>
+                <div class="results-container" id="results-container">
+                    <!-- Results will be displayed here -->
+                </div>
+            </section>
+
+            <!-- Download Section -->
+            <section class="card" id="download-section" style="display: none;">
+                <h2><i class="fas fa-download"></i> Step 4: Download Processed Dataset</h2>
+                <div class="download-content">
+                    <p>Your processed dataset is ready for download.</p>
+                    <button class="btn btn-success" id="download-btn">
+                        <i class="fas fa-file-csv"></i> Download Processed Dataset
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Dataset Preprocessor & Model Comparator © 2024 | Built with Flask & Scikit-learn</p>
+            <p class="footer-links">
+                <a href="#"><i class="fas fa-question-circle"></i> Help</a> |
+                <a href="#"><i class="fas fa-bug"></i> Report Issue</a> |
+                <a href="#"><i class="fas fa-code"></i> API Docs</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+Flask
+Flask-CORS
+Flask-Session
+pandas
+numpy
+scikit-learn
+openpyxl
+python-dotenv
+gunicorn
+joblib
